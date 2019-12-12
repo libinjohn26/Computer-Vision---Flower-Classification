@@ -14,16 +14,15 @@ labels = classValue[0]
 
 path = os.path.join(dataFile)
 image_size = 100
-#i = 0
+i = 0
 training_data = []
 for img in tqdm(os.listdir(path)):  # iterate over each image
     try:
-        #class_value = labels[i]
+        class_value = labels[i]
         img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_UNCHANGED)# ,cv2.IMREAD_GRAYSCALE)  # convert to array
         new_array = cv2.resize(img_array, (image_size, image_size))  # resize to normalize data size
-        training_data.append(new_array)
-        #training_data.append([new_array, class_value])  # add this to our training_data
-        #i = i + 1
+        training_data.append([new_array, class_value])  # add this to our training_data
+        i = i + 1
         #plt.imshow(new_array, cmap='gray')  # graph it
         #plt.show()  # display!
     except Exception as e:  # in the interest in keeping the output clean...
@@ -35,21 +34,21 @@ for img in tqdm(os.listdir(path)):  # iterate over each image
 
 
 random.shuffle(training_data)
-#print(len(training_data))
 
-#X = []
-#y = []
+X = []
+y = []
 
-#for features,label in training_data:
-#    X.append(features)
-#    y.append(label)
+for features,label in training_data:
+    X.append(features)
+    y.append(label)
 
-X = np.array(training_data).reshape(-1, image_size, image_size, 1)
+X = np.array(X).reshape(-1, image_size, image_size, 1)
+y = np.array(y)
 
 pickle_out = open("X.pickle","wb")
 pickle.dump(X, pickle_out)
 pickle_out.close()
 
 pickle_out = open("y.pickle","wb")
-pickle.dump(labels, pickle_out)
+pickle.dump(y, pickle_out)
 pickle_out.close()
