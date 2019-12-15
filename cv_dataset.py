@@ -4,6 +4,7 @@ import os
 import cv2
 from tqdm import tqdm
 from scipy.io import loadmat
+from sklearn.model_selection import train_test_split
 import random
 import pickle
 
@@ -42,13 +43,29 @@ for features,label in training_data:
     X.append(features)
     y.append(label)
 
-X = np.array(X).reshape(-1, image_size, image_size, 1)
+
+X = np.array(X).reshape(-1, image_size, image_size, 3)
 y = np.array(y)
 
-pickle_out = open("X.pickle","wb")
-pickle.dump(X, pickle_out)
+x_train,x_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
+
+print(len(x_train))
+print(len(x_test))
+print(len(y_train))
+print(len(y_test))
+
+pickle_out = open("X_train.pickle","wb")
+pickle.dump(x_train, pickle_out)
 pickle_out.close()
 
-pickle_out = open("y.pickle","wb")
-pickle.dump(y, pickle_out)
+pickle_out = open("y_train.pickle","wb")
+pickle.dump(y_train, pickle_out)
+pickle_out.close()
+
+pickle_out = open("X_test.pickle","wb")
+pickle.dump(x_test, pickle_out)
+pickle_out.close()
+
+pickle_out = open("y_test.pickle","wb")
+pickle.dump(y_test, pickle_out)
 pickle_out.close()
